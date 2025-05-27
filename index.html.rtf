@@ -1,654 +1,577 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2821
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XAUAlgoAI - AI-Powered Gold Trading Indicator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light gray background, keeping for contrast */
+            color: #1e293b; /* Dark slate gray text */
+        }
+        /* Custom scroll-to-top button styling */
+        #scrollToTopBtn {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed/sticky position */
+            bottom: 20px; /* Place the button at the bottom of the page */
+            right: 30px; /* Place the button at the right */
+            z-index: 99; /* Make sure it does not overlap */
+            border: none; /* Remove borders */
+            outline: none; /* Remove outline */
+            background-color: #d97706; /* Gold background */
+            color: white; /* Text color */
+            cursor: pointer; /* Add a mouse pointer on hover */
+            padding: 15px; /* Some padding */
+            border-radius: 50%; /* Rounded corners */
+            font-size: 18px; /* Increase font size */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
 
-\f0\fs24 \cf0 <!DOCTYPE html>\
-<html lang="en">\
-<head>\
-    <meta charset="UTF-8">\
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
-    <title>XAUAlgoAI - AI-Powered Gold Trading Indicator</title>\
-    <script src="https://cdn.tailwindcss.com"></script>\
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">\
-    <script src="https://d3js.org/d3.v7.min.js"></script>\
-    <style>\
-        body \{\
-            font-family: 'Inter', sans-serif;\
-            background-color: #f8fafc; /* Light gray background, keeping for contrast */\
-            color: #1e293b; /* Dark slate gray text */\
-        \}\
-        /* Custom scroll-to-top button styling */\
-        #scrollToTopBtn \{\
-            display: none; /* Hidden by default */\
-            position: fixed; /* Fixed/sticky position */\
-            bottom: 20px; /* Place the button at the bottom of the page */\
-            right: 30px; /* Place the button at the right */\
-            z-index: 99; /* Make sure it does not overlap */\
-            border: none; /* Remove borders */\
-            outline: none; /* Remove outline */\
-            background-color: #d97706; /* Gold background */\
-            color: white; /* Text color */\
-            cursor: pointer; /* Add a mouse pointer on hover */\
-            padding: 15px; /* Some padding */\
-            border-radius: 50%; /* Rounded corners */\
-            font-size: 18px; /* Increase font size */\
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\
-            transition: background-color 0.3s ease;\
-        \}\
-\
-        #scrollToTopBtn:hover \{\
-            background-color: #b45309; /* Darker gold on hover */\
-        \}\
-        /* Responsive video container */\
-        .video-container \{\
-            position: relative;\
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */\
-            height: 0;\
-            overflow: hidden;\
-            max-width: 100%;\
-            background: #000;\
-            border-radius: 0.75rem; /* rounded-xl */\
-        \}\
-        .video-container iframe \{\
-            position: absolute;\
-            top: 0;\
-            left: 0;\
-            width: 100%;\
-            height: 100%;\
-        \}\
-        /* Chart specific styles */\
-        .chart-container \{\
-            background-color: #1a202c; /* Dark background for chart */\
-            border-radius: 0.75rem;\
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\
-            padding: 1rem;\
-            max-width: 900px;\
-            margin: 0 auto;\
-        \}\
-        .chart-container svg \{\
-            display: block;\
-            margin: auto;\
-        \}\
-        .line \{\
-            fill: none;\
-            stroke: #facc15; /* Tailwind yellow-400 */\
-            stroke-width: 2px;\
-        \}\
-        .axis text \{\
-            fill: #cbd5e0; /* Tailwind slate-300 */\
-        \}\
-        .axis line, .axis path \{\
-            stroke: #4a5568; /* Tailwind gray-700 */\
-        \}\
-\
-        /* Hero section with background image */\
-        #home \{\
-            /* Using a reliable placeholder image for the background */\
-            background-image: url('https://placehold.co/1200x800/1a202c/facc15?text=Gold+Trading+Chart+Background');\
-            background-size: cover;\
-            background-position: center;\
-            background-repeat: no-repeat;\
-            position: relative;\
-            overflow: hidden; /* Ensures content doesn't spill out */\
-        \}\
-        #home::before \{\
-            content: '';\
-            position: absolute;\
-            top: 0;\
-            left: 0;\
-            right: 0;\
-            bottom: 0;\
-            background: rgba(0, 0, 0, 0.6); /* Dark overlay for text readability */\
-            z-index: 1;\
-        \}\
-        #home .container \{\
-            position: relative;\
-            z-index: 2; /* Ensure content is above the overlay */\
-        \}\
-    </style>\
-</head>\
-<body class="antialiased">\
-\
-    <header class="bg-gray-900 text-white p-4 shadow-lg">\
-        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">\
-            <a href="#" class="text-3xl font-bold rounded-lg p-2 hover:bg-gray-700 hover:text-yellow-400 transition duration-300">XAUAlgoAI</a>\
-            <nav class="mt-4 md:mt-0">\
-                <ul class="flex space-x-6">\
-                    <li><a href="#home" class="hover:text-yellow-400 transition duration-300 text-lg">Home</a></li>\
-                    <li><a href="#features" class="hover:text-yellow-400 transition duration-300 text-lg">Features</a></li>\
-                    <li><a href="#gold-chart" class="hover:text-yellow-400 transition duration-300 text-lg">Live Chart</a></li>\
-                    <li><a href="#strategy-generator" class="hover:text-yellow-400 transition duration-300 text-lg">Strategy AI</a></li>\
-                    <li><a href="#pricing" class="hover:text-yellow-400 transition duration-300 text-lg">Pricing</a></li>\
-                    <li><a href="#contact" class="hover:text-yellow-400 transition duration-300 text-lg">Contact</a></li>\
-                </ul>\
-            </nav>\
-        </div>\
-    </header>\
-\
-    <section id="home" class="text-white py-20 md:py-32 text-center rounded-b-3xl shadow-xl">\
-        <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-center gap-12">\
-            <div class="lg:w-full text-center">\
-                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6 animate-fade-in-down">\
-                    Unlock Gold Trading Potential with AI\
-                </h1>\
-                <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto opacity-90 animate-fade-in-up">\
-                    XAUAlgoAI provides a cutting-edge, AI-powered indicator designed to give you a significant edge in the volatile gold market. Make smarter, data-driven trading decisions.\
-                </p>\
-                <a href="#pricing" class="bg-yellow-400 text-gray-900 hover:bg-yellow-500 font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out inline-block">\
-                    Get Started Today\
-                </a>\
-            </div>\
-            </div>\
-    </section>\
-\
-    <section class="py-16 md:py-24 bg-gray-900 text-white">\
-        <div class="container mx-auto px-4 text-center">\
-            <h2 class="text-4xl font-bold mb-12">Numbers That Speak Volumes</h2>\
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">\
-                <div class="p-8 rounded-xl bg-gray-800 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">\
-                    <p class="text-6xl font-extrabold text-yellow-400 mb-2">90%+</p>\
-                    <p class="text-xl font-semibold text-gray-200">Signal Accuracy</p>\
-                    <p class="text-gray-400 text-sm">Based on historical backtesting</p>\
-                </div>\
-                <div class="p-8 rounded-xl bg-gray-800 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">\
-                    <p class="text-6xl font-extrabold text-yellow-400 mb-2">24/7</p>\
-                    <p class="text-xl font-semibold text-gray-200">Market Monitoring</p>\
-                    <p class="text-gray-400 text-sm">AI constantly analyzes global gold markets</p>\
-                </div>\
-                <div class="p-8 rounded-xl bg-gray-800 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">\
-                    <p class="text-6xl font-extrabold text-yellow-400 mb-2">1000+</p>\
-                    <p class="text-xl font-semibold text-gray-200">Satisfied Traders</p>\
-                    <p class="text-gray-400 text-sm">Join our growing community</p>\
-                </div>\
-            </div>\
-        </div>\
-    </section>\
-\
-    <section id="features" class="py-16 md:py-24 bg-white">\
-        <div class="container mx-auto px-4">\
-            <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Why Choose XAUAlgoAI?</h2>\
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">\
-                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300 ease-in-out flex flex-col items-center text-center cursor-pointer">\
-                    <div class="text-5xl text-yellow-600 mb-4">\uc0\u55357 \u56481 </div> <h3 class="text-2xl font-semibold mb-3 text-gray-700">AI-Powered Precision</h3>\
-                    <p class="text-gray-600">Leverage advanced machine learning algorithms to analyze vast amounts of market data, identifying high-probability trading opportunities in gold.</p>\
-                </div>\
-                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300 ease-in-out flex flex-col items-center text-center cursor-pointer">\
-                    <div class="text-5xl text-green-600 mb-4">\uc0\u55357 \u56520 </div> <h3 class="text-2xl font-semibold mb-3 text-gray-700">Enhanced Accuracy</h3>\
-                    <p class="text-gray-600">Our indicator adapts to changing market conditions, providing more accurate signals than traditional methods, reducing false positives.</p>\
-                </div>\
-                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300 ease-in-out flex flex-col items-center text-center cursor-pointer">\
-                    <div class="text-5xl text-yellow-600 mb-4">\uc0\u9201 \u65039 </div> <h3 class="text-2xl font-semibold mb-3 text-gray-700">Real-time Signals</h3>\
-                    <p class="text-gray-600">Receive instant alerts and insights directly to your trading platform, ensuring you never miss a critical market move.</p>\
-                </div>\
-                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300 ease-in-out flex flex-col items-center text-center cursor-pointer">\
-                    <div class="text-5xl text-red-600 mb-4">\uc0\u55357 \u57057 \u65039 </div> <h3 class="text-2xl font-semibold mb-3 text-gray-700">Robust Risk Management</h3>\
-                    <p class="text-gray-600">Integrates with your existing risk parameters, helping you manage potential downsides while maximizing upside potential.</p>\
-                </div>\
-                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300 ease-in-out flex flex-col items-center text-center cursor-pointer">\
-                    <div class="text-5xl text-yellow-600 mb-4">\uc0\u55357 \u56522 </div> <h3 class="text-2xl font-semibold mb-3 text-gray-700">User-Friendly Interface</h3>\
-                    <p class="text-gray-600">Designed for traders of all levels, our intuitive interface makes it easy to understand and act on the generated signals.</p>\
-                </div>\
-                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300 ease-in-out flex flex-col items-center text-center cursor-pointer">\
-                    <div class="text-5xl text-yellow-600 mb-4">\uc0\u9881 \u65039 </div> <h3 class="text-2xl font-semibold mb-3 text-gray-700">Customizable Settings</h3>\
-                    <p class="text-gray-600">Tailor the indicator's sensitivity and parameters to match your specific trading style and risk tolerance.</p>\
-                </div>\
-            </div>\
-        </div>\
-    </section>\
-\
-    <section id="how-it-works" class="bg-gray-100 py-16 md:py-24">\
-        <div class="container mx-auto px-4 text-center">\
-            <h2 class="text-4xl font-bold mb-12 text-gray-800">How XAUAlgoAI Works</h2>\
-            <div class="max-w-4xl mx-auto text-lg text-gray-700 space-y-6">\
-                <p>XAUAlgoAI utilizes a sophisticated blend of machine learning models trained on historical gold price data, macroeconomic indicators, and global market sentiment.</p>\
-                <p>Our AI continuously learns and adapts, identifying complex patterns and correlations that are invisible to the human eye or traditional indicators. When a high-probability setup is detected, it generates a clear, actionable signal, empowering you to enter or exit trades with confidence.</p>\
-                <p class="font-semibold text-yellow-700">It's like having a team of expert analysts working for you 24/7, without the high costs.</p>\
-            </div>\
-        </div>\
-    </section>\
-\
-    <section id="gold-chart" class="py-16 md:py-24 bg-gray-900 text-white">\
-        <div class="container mx-auto px-4 text-center">\
-            <h2 class="text-4xl font-bold mb-12">Live XAU/USD Price Chart</h2>\
-            <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">\
-                Track the real-time movement of Gold (XAU) against the US Dollar (USD) with our interactive chart.\
-            </p>\
-            <div id="goldChartContainer" class="chart-container">\
-                </div>\
-            <p class="text-sm text-gray-400 mt-4">\
-                *Data is simulated for demonstration purposes. For live trading, always refer to your broker's feed.\
-            </p>\
-        </div>\
-    </section>\
-\
-    <section id="strategy-generator" class="py-16 md:py-24 bg-gray-100">\
-        <div class="container mx-auto px-4 text-center">\
-            <h2 class="text-4xl font-bold mb-12 text-gray-800">\uc0\u10024  AI-Powered Strategy Ideas \u10024 </h2>\
-            <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">\
-                Describe your trading style or what you're looking for, and our AI will suggest tailored gold trading strategies.\
-            </p>\
-            <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">\
-                <div class="space-y-6">\
-                    <div>\
-                        <label for="strategyInput" class="block text-left text-gray-700 text-sm font-bold mb-2">\
-                            Tell us about your trading preferences (e.g., "short-term scalping," "long-term trend following," "risk-averse strategies"):\
-                        </label>\
-                        <textarea id="strategyInput" rows="4" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="e.g., 'I prefer strategies with low drawdown and clear entry/exit points.'"></textarea>\
-                    </div>\
-                    <button id="generateStrategyBtn" class="bg-yellow-600 text-gray-900 hover:bg-yellow-700 font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">\
-                        Generate Strategy Ideas \uc0\u10024 \
-                    </button>\
-                    <div id="strategyOutput" class="mt-8 p-6 bg-gray-50 rounded-lg text-left text-gray-700 hidden">\
-                        <p class="font-semibold mb-2">Here are some ideas for you:</p>\
-                        <div id="strategyContent" class="whitespace-pre-wrap"></div>\
-                    </div>\
-                    <div id="loadingIndicator" class="hidden mt-4 text-yellow-600 font-semibold">Generating ideas...</div>\
-                </div>\
-            </div>\
-        </div>\
-    </section>\
-\
-    <section id="video-showcase" class="py-16 md:py-24 bg-gray-900 text-white">\
-        <div class="container mx-auto px-4 text-center">\
-            <h2 class="text-4xl font-bold mb-12">See XAUAlgoAI in Action</h2>\
-            <div class="max-w-4xl mx-auto video-container shadow-xl">\
-                <iframe\
-                    src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&controls=1&modestbranding=1&rel=0"\
-                    frameborder="0"\
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"\
-                    allowfullscreen\
-                    class="rounded-xl"\
-                    title="XAUAlgoAI Product Demo"\
-                ></iframe>\
-            </div>\
-            <p class="text-lg text-gray-300 mt-8">Watch this video to understand how XAUAlgoAI can revolutionize your gold trading strategy.</p>\
-        </div>\
-    </section>\
-\
-    <section class="py-16 md:py-24 bg-gradient-to-br from-gray-800 to-black text-white">\
-        <div class="container mx-auto px-4 text-center">\
-            <h2 class="text-4xl font-bold mb-12">Ready to Get Started?</h2>\
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">\
-                <div class="p-8 rounded-xl bg-gray-700 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">\
-                    <div class="text-5xl font-extrabold text-yellow-400 mb-4">1</div>\
-                    <h3 class="text-2xl font-semibold mb-3 text-gray-100">Choose Your Plan</h3>\
-                    <p class="text-gray-300">Select the XAUAlgoAI subscription that best fits your trading needs and goals.</p>\
-                </div>\
-                <div class="p-8 rounded-xl bg-gray-700 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">\
-                    <div class="text-5xl font-extrabold text-yellow-400 mb-4">2</div>\
-                    <h3 class="text-2xl font-semibold mb-3 text-gray-100">Install the Indicator</h3>\
-                    <p class="text-gray-300">Follow our simple instructions to integrate XAUAlgoAI with your MT4/MT5 platform.</p>\
-                </div>\
-                <div class="p-8 rounded-xl bg-gray-700 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">\
-                    <div class="text-5xl font-extrabold text-yellow-400 mb-4">3</div>\
-                    <h3 class="text-2xl font-semibold mb-3 text-gray-100">Start Trading Smarter</h3>\
-                    <p class="text-gray-300">Receive real-time AI-powered signals and make informed gold trading decisions.</p>\
-                </div>\
-            </div>\
-            <a href="#pricing" class="mt-12 bg-yellow-400 text-gray-900 hover:bg-yellow-500 font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out inline-block">\
-                View Pricing Plans\
-            </a>\
-        </div>\
-    </section>\
-\
-    <section class="py-16 md:py-24 bg-white">\
-        <div class="container mx-auto px-4 text-center">\
-            <h2 class="text-4xl font-bold mb-12 text-gray-800">What Our Traders Say</h2>\
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">\
-                <div class="bg-gray-100 p-8 rounded-xl shadow-md border-t-4 border-yellow-400 hover:shadow-lg transition duration-300 ease-in-out cursor-pointer">\
-                    <p class="text-lg italic text-gray-700 mb-4">"XAUAlgoAI has completely transformed my gold trading. The accuracy of the signals is astounding, and I've seen a significant improvement in my profitability."</p>\
-                    <p class="font-semibold text-yellow-600">- Alex R., Professional Trader</p>\
-                </div>\
-                <div class="bg-gray-100 p-8 rounded-xl shadow-md border-t-4 border-yellow-400 hover:shadow-lg transition duration-300 ease-in-out cursor-pointer">\
-                    <p class="text-lg italic text-gray-700 mb-4">"As a beginner, I was intimidated by gold trading. XAUAlgoAI made it accessible and profitable. Highly recommend!"</p>\
-                    <p class="font-semibold text-yellow-600">- Sarah L., New Trader</p>\
-                </div>\
-            </div>\
-        </div>\
-    </section>\
-\
-    <section id="pricing" class="py-16 md:py-24 bg-gradient-to-br from-gray-900 to-gray-700 text-white rounded-t-3xl shadow-xl">\
-        <div class="container mx-auto px-4 text-center">\
-            <h2 class="text-4xl font-bold mb-12">Flexible Plans for Every Trader</h2>\
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">\
-                <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg flex flex-col justify-between transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">\
-                    <div>\
-                        <h3 class="text-3xl font-bold mb-4 text-gray-700">Basic</h3>\
-                        <p class="text-5xl font-extrabold mb-6">\uc0\u8377 999<span class="text-xl font-normal">/month</span></p>\
-                        <ul class="text-left space-y-3 mb-8 text-gray-700">\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> Real-time Gold Signals</li>\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> Basic Market Analysis</li>\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> Email Support</li>\
-                            <li class="flex items-center text-gray-500 line-through"><span class="text-red-500 mr-2">\uc0\u10006 </span> Advanced AI Insights</li>\
-                            <li class="flex items-center text-gray-500 line-through"><span class="text-red-500 mr-2">\uc0\u10006 </span> Priority Support</li>\
-                        </ul>\
-                    </div>\
-                    <a href="#contact" class="bg-gray-800 text-yellow-400 hover:bg-gray-900 font-bold py-3 px-6 rounded-full text-lg shadow-md transition duration-300">Choose Basic</a>\
-                </div>\
-\
-                <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg border-4 border-yellow-400 flex flex-col justify-between transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">\
-                    <div>\
-                        <h3 class="text-3xl font-bold mb-4 text-yellow-600">Pro <span class="text-sm bg-yellow-400 text-gray-900 px-2 py-1 rounded-full ml-2">Recommended</span></h3>\
-                        <p class="text-5xl font-extrabold mb-6">\uc0\u8377 1999<span class="text-xl font-normal">/month</span></p>\
-                        <ul class="text-left space-y-3 mb-8 text-gray-700">\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> All Basic Features</li>\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> Advanced AI Insights</li>\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> Customizable Parameters</li>\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> Priority Email Support</li>\
-                            <li class="flex items-center text-gray-500 line-through"><span class="text-red-500 mr-2">\uc0\u10006 </span> Dedicated Account Manager</li>\
-                        </ul>\
-                    </div>\
-                    <a href="#contact" class="bg-yellow-500 text-gray-900 hover:bg-yellow-600 font-bold py-3 px-6 rounded-full text-lg shadow-md transition duration-300">Choose Pro</a>\
-                </div>\
-\
-                <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg flex flex-col justify-between transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">\
-                    <div>\
-                        <h3 class="text-3xl font-bold mb-4 text-gray-700">Premium</h3>\
-                        <p class="text-5xl font-extrabold mb-6">\uc0\u8377 3999<span class="text-xl font-normal">/month</span></p>\
-                        <ul class="text-left space-y-3 mb-8 text-gray-700">\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> All Pro Features</li>\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> Dedicated Account Manager</li>\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> Custom Integration Support</li>\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> 24/7 Phone Support</li>\
-                            <li class="flex items-center"><span class="text-green-500 mr-2">\uc0\u10004 </span> Exclusive Webinars</li>\
-                        </ul>\
-                    </div>\
-                    <a href="#contact" class="bg-gray-700 text-yellow-400 hover:bg-gray-800 font-bold py-3 px-6 rounded-full text-lg shadow-md transition duration-300">Choose Premium</a>\
-                </div>\
-            </div>\
-        </div>\
-    </section>\
-\
-    <section class="py-16 md:py-24 bg-white">\
-        <div class="container mx-auto px-4">\
-            <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Frequently Asked Questions</h2>\
-            <div class="max-w-3xl mx-auto space-y-6">\
-                <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer">\
-                    <h3 class="text-xl font-semibold mb-2 text-gray-700">What trading platforms does XAUAlgoAI support?</h3>\
-                    <p class="text-gray-600">Currently, XAUAlgoAI is compatible with MetaTrader 4 (MT4) and MetaTrader 5 (MT5). We are working on expanding support to other popular platforms soon.</p>\
-                </div>\
-                <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer">\
-                    <h3 class="text-xl font-semibold mb-2 text-gray-700">Is XAUAlgoAI suitable for beginners?</h3>\
-                    <p class="text-gray-600">Yes! While it uses advanced AI, our indicator is designed with an intuitive interface, making it accessible for both seasoned traders and those new to the gold market.</p>\
-                </div>\
-                <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer">\
-                    <h3 class="text-xl font-semibold mb-2 text-gray-700">Do you offer a free trial?</h3>\
-                    <p class="text-gray-600">We do not offer a free trial at this moment. However, we have a 30-day money-back guarantee if you are not satisfied with the product.</p>\
-                </div>\
-                <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer">\
-                    <h3 class="text-xl font-semibold mb-2 text-gray-700">How do I get support?</h3>\
-                    <p class="text-gray-600">You can reach our support team via email at support@xaualgoai.com. Pro and Enterprise plans include priority support options.</p>\
-                </div>\
-            </div>\
-        </div>\
-    </section>\
-\
-    <section id="contact" class="py-16 md:py-24 bg-gray-100">\
-        <div class="container mx-auto px-4 text-center">\
-            <h2 class="text-4xl font-bold mb-12 text-gray-800">Get in Touch</h2>\
-            <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">\
-                <p class="text-lg text-gray-700 mb-6">Have questions or ready to elevate your gold trading? Contact us today!</p>\
-                <form class="space-y-6">\
-                    <div>\
-                        <label for="name" class="block text-left text-gray-700 text-sm font-bold mb-2">Name</label>\
-                        <input type="text" id="name" name="name" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Your Name">\
-                    </div>\
-                    <div>\
-                        <label for="email" class="block text-left text-gray-700 text-sm font-bold mb-2">Email</label>\
-                        <input type="email" id="email" name="email" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="your@example.com">\
-                    </div>\
-                    <div>\
-                        <label for="message" class="block text-left text-gray-700 text-sm font-bold mb-2">Message</label>\
-                        <textarea id="message" name="message" rows="5" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Your message..."></textarea>\
-                    </div>\
-                    <button type="submit" class="bg-yellow-600 text-gray-900 hover:bg-yellow-700 font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">\
-                        Send Message\
-                    </button>\
-                </form>\
-            </div>\
-        </div>\
-    </section>\
-\
-    <footer class="bg-gray-900 text-white py-8 rounded-t-3xl shadow-inner">\
-        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-center md:text-left">\
-            <p>\'a9 2025 XAUAlgoAI. All rights reserved.</p>\
-            <div class="flex space-x-6 mt-4 md:mt-0">\
-                <a href="#" class="hover:text-yellow-400 transition duration-300">Privacy Policy</a>\
-                <a href="#" class="hover:text-yellow-400 transition duration-300">Terms of Service</a>\
-            </div>\
-        </div>\
-    </footer>\
-\
-    <button onclick="scrollToTop()" id="scrollToTopBtn" title="Go to top">\uc0\u11014 \u65039 </button>\
-\
-    <script>\
-        // Smooth scrolling for navigation links\
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => \{\
-            anchor.addEventListener('click', function (e) \{\
-                e.preventDefault();\
-\
-                document.querySelector(this.getAttribute('href')).scrollIntoView(\{\
-                    behavior: 'smooth'\
-                \});\
-            \});\
-        \});\
-\
-        // Get the button\
-        let scrollToTopBtn = document.getElementById("scrollToTopBtn");\
-\
-        // When the user scrolls down 20px from the top of the document, show the button\
-        window.onscroll = function() \{scrollFunction()\};\
-\
-        function scrollFunction() \{\
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) \{\
-                scrollToTopBtn.style.display = "block";\
-            \} else \{\
-                scrollToTopBtn.style.display = "none";\
-            \}\
-        \}\
-\
-        // When the user clicks on the button, scroll to the top of the document\
-        function scrollToTop() \{\
-            document.body.scrollTop = 0; // For Safari\
-            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera\
-        \}\
-\
-        // Placeholder for form submission (no actual backend)\
-        document.querySelector('form').addEventListener('submit', function(e) \{\
-            e.preventDefault();\
-            // In a real application, you would send this data to a server\
-            const name = document.getElementById('name').value;\
-            const email = document.getElementById('email').value;\
-            const message = document.getElementById('message').value;\
-\
-            // Display a simple message box instead of alert()\
-            const messageBox = document.createElement('div');\
-            messageBox.className = 'fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50';\
-            messageBox.innerHTML = `\
-                <div class="bg-white p-8 rounded-lg shadow-xl text-center max-w-sm mx-auto">\
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Message Sent!</h3>\
-                    <p class="text-gray-700 mb-6">Thank you, $\{name\}! Your message has been received. We'll get back to you at $\{email\} shortly.</p>\
-                    <button class="bg-yellow-600 text-white hover:bg-yellow-700 font-bold py-2 px-6 rounded-full" onclick="this.parentNode.parentNode.remove()">Close</button>\
-                </div>\
-            `;\
-            document.body.appendChild(messageBox);\
-\
-            // Clear the form\
-            this.reset();\
-        \});\
-\
-        // AI-Powered Strategy Generator\
-        const generateStrategyBtn = document.getElementById('generateStrategyBtn');\
-        const strategyInput = document.getElementById('strategyInput');\
-        const strategyOutput = document.getElementById('strategyOutput');\
-        const strategyContent = document.getElementById('strategyContent');\
-        const loadingIndicator = document.getElementById('loadingIndicator');\
-\
-        generateStrategyBtn.addEventListener('click', async () => \{\
-            const prompt = strategyInput.value.trim();\
-            if (!prompt) \{\
-                // Display a simple message box if input is empty\
-                const messageBox = document.createElement('div');\
-                messageBox.className = 'fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50';\
-                messageBox.innerHTML = `\
-                    <div class="bg-white p-8 rounded-lg shadow-xl text-center max-w-sm mx-auto">\
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Input Required!</h3>\
-                        <p class="text-gray-700 mb-6">Please describe your trading preferences before generating ideas.</p>\
-                        <button class="bg-yellow-600 text-white hover:bg-yellow-700 font-bold py-2 px-6 rounded-full" onclick="this.parentNode.parentNode.remove()">Close</button>\
-                    </div>\
-                `;\
-                document.body.appendChild(messageBox);\
-                return;\
-            \}\
-\
-            loadingIndicator.classList.remove('hidden');\
-            strategyOutput.classList.add('hidden');\
-            strategyContent.textContent = ''; // Clear previous content\
-\
-            try \{\
-                console.log('Attempting to call Gemini API...');\
-                let chatHistory = [];\
-                chatHistory.push(\{ role: "user", parts: [\{ text: `Generate gold trading strategy ideas based on the following preference: "$\{prompt\}". Provide actionable tips and consider risk management. Structure the response clearly with bullet points or numbered lists.` \}] \});\
-                const payload = \{ contents: chatHistory \};\
-                const apiKey = ""; // Canvas will automatically provide this in runtime\
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$\{apiKey\}`;\
-\
-                const response = await fetch(apiUrl, \{\
-                    method: 'POST',\
-                    headers: \{ 'Content-Type': 'application/json' \},\
-                    body: JSON.stringify(payload)\
-                \});\
-\
-                if (!response.ok) \{\
-                    const errorText = await response.text();\
-                    throw new Error(`API call failed with status $\{response.status\}: $\{errorText\}`);\
-                \}\
-\
-                const result = await response.json();\
-                console.log('Gemini API response:', result);\
-\
-                if (result.candidates && result.candidates.length > 0 &&\
-                    result.candidates[0].content && result.candidates[0].content.parts &&\
-                    result.candidates[0].content.parts.length > 0) \{\
-                    const text = result.candidates[0].content.parts[0].text;\
-                    strategyContent.textContent = text;\
-                    strategyOutput.classList.remove('hidden');\
-                \} else \{\
-                    strategyContent.textContent = "Sorry, I couldn't generate strategy ideas at this time. The AI response was empty or malformed.";\
-                    strategyOutput.classList.remove('hidden');\
-                \}\
-            \} catch (error) \{\
-                console.error('Error calling Gemini API:', error);\
-                strategyContent.textContent = `An error occurred while generating ideas: $\{error.message\}. Please try again later.`;\
-                strategyOutput.classList.remove('hidden');\
-            \} finally \{\
-                loadingIndicator.classList.add('hidden');\
-            \}\
-        \});\
-\
-        // D3.js Gold Chart\
-        const margin = \{ top: 20, right: 30, bottom: 40, left: 60 \};\
-        let width = 0;\
-        let height = 0;\
-        let svg;\
-        let x, y, line;\
-        let data = [];\
-        let currentPrice = 1950; // Starting gold price\
-\
-        function initializeChart() \{\
-            const container = document.getElementById('goldChartContainer');\
-            if (!container) \{\
-                console.error('Chart container not found!');\
-                return; // Exit if container not found\
-            \}\
-\
-            // Clear any existing SVG to prevent duplicates on resize\
-            d3.select(container).select("svg").remove();\
-\
-            width = container.clientWidth - margin.left - margin.right;\
-            height = 300 - margin.top - margin.bottom; // Fixed height for chart area\
-\
-            svg = d3.select("#goldChartContainer")\
-                .append("svg")\
-                .attr("width", width + margin.left + margin.right)\
-                .attr("height", height + margin.top + margin.bottom)\
-                .append("g")\
-                .attr("transform", `translate($\{margin.left\},$\{margin.top\})`);\
-\
-            x = d3.scaleTime().range([0, width]);\
-            y = d3.scaleLinear().range([height, 0]);\
-\
-            line = d3.line()\
-                .x(d => x(d.time))\
-                .y(d => y(d.price));\
-\
-            // Add X and Y axis groups\
-            svg.append("g")\
-                .attr("class", "x-axis axis")\
-                .attr("transform", `translate(0,$\{height\})`);\
-\
-            svg.append("g")\
-                .attr("class", "y-axis axis");\
-\
-            // Add the path for the line\
-            svg.append("path")\
-                .attr("class", "line");\
-\
-            // Initialize data with 30 points\
-            data = [];\
-            let now = new Date();\
-            for (let i = 0; i < 30; i++) \{\
-                data.push(\{\
-                    time: new Date(now.getTime() - (30 - 1 - i) * 1000), // 1 second intervals\
-                    price: currentPrice + (Math.random() - 0.5) * 10 // Random initial fluctuation\
-                \});\
-            \}\
-            updateChart();\
-            console.log('D3.js chart initialized.');\
-        \}\
-\
-        function updateChart() \{\
-            // Add new data point\
-            const newTime = new Date();\
-            const priceChange = (Math.random() - 0.5) * 5; // Price fluctuates by +/- 2.5\
-            currentPrice += priceChange;\
-            currentPrice = Math.max(1800, Math.min(2100, currentPrice)); // Keep price within a reasonable range\
-            data.push(\{ time: newTime, price: currentPrice \});\
-\
-            // Remove old data points to keep a fixed window (e.g., last 30 seconds)\
-            if (data.length > 30) \{\
-                data.shift();\
-            \}\
-\
-            // Update scales\
-            x.domain(d3.extent(data, d => d.time));\
-            y.domain([d3.min(data, d => d.price) - 5, d3.max(data, d => d.price) + 5]); // Add padding to y-axis\
-\
-            // Update axes\
-            svg.select(".x-axis")\
-                .call(d3.axisBottom(x).ticks(d3.timeSecond.every(5)).tickFormat(d3.timeFormat("%H:%M:%S")));\
-\
-            svg.select(".y-axis")\
-                .call(d3.axisLeft(y).tickFormat(d => `\uc0\u8377 $\{d.toFixed(2)\}`)); // Format Y-axis as Rupees\
-\
-            // Update line path\
-            svg.select(".line")\
-                .datum(data)\
-                .attr("d", line);\
-        \}\
-\
-        // Initialize chart on window load\
-        window.onload = function() \{\
-            initializeChart();\
-            // Update chart every second\
-            setInterval(updateChart, 1000);\
-        \};\
-\
-        // Re-initialize chart on window resize for responsiveness\
-        window.addEventListener('resize', initializeChart);\
-    </script>\
-</body>\
-</html>}
+        #scrollToTopBtn:hover {
+            background-color: #b45309; /* Darker gold on hover */
+        }
+        /* Responsive video container */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 0.75rem; /* rounded-xl */
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        /* Chart specific styles */
+        .chart-container {
+            background-color: #1a202c; /* Dark background for chart */
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .chart-container svg {
+            display: block;
+            margin: auto;
+        }
+        .line {
+            fill: none;
+            stroke: #facc15; /* Tailwind yellow-400 */
+            stroke-width: 2px;
+        }
+        .axis text {
+            fill: #cbd5e0; /* Tailwind slate-300 */
+        }
+        .axis line, .axis path {
+            stroke: #4a5568; /* Tailwind gray-700 */
+        }
+
+        /* Hero section with background image */
+        #home {
+            background-image: url('https://images.unsplash.com/photo-1590283437107-1608d13261a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            overflow: hidden; /* Ensures content doesn't spill out */
+        }
+        #home::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7); /* Darker overlay for better text readability */
+            z-index: 1;
+        }
+        #home .container {
+            position: relative;
+            z-index: 2; /* Ensure content is above the overlay */
+        }
+        /* Table specific styles for Features section */
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #4a5568; /* gray-700 */
+            text-align: left;
+        }
+        .comparison-table th {
+            background-color: #2d3748; /* gray-800 */
+            color: #ffffff; /* Changed from yellow-400 to white */
+            font-weight: 600;
+        }
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        .comparison-table tbody tr:nth-child(odd) {
+            background-color: #2a3341; /* Slightly lighter dark for stripe */
+        }
+        .comparison-table tbody tr:nth-child(even) {
+            background-color: #1a202c; /* Darker background */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-gray-900 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
+            <a href="#" class="text-3xl font-bold rounded-lg p-2 hover:bg-gray-700 hover:text-yellow-400 transition duration-300">XAUAlgoAI</a>
+            <nav class="mt-4 md:mt-0">
+                <ul class="flex space-x-6">
+                    <li><a href="#home" class="hover:text-yellow-400 transition duration-300 text-lg">Home</a></li>
+                    <li><a href="#features" class="hover:text-yellow-400 transition duration-300 text-lg">Features</a></li>
+                    <li><a href="#gold-chart" class="hover:text-yellow-400 transition duration-300 text-lg">Live Chart</a></li>
+                    <li><a href="#pricing" class="hover:text-yellow-400 transition duration-300 text-lg">Pricing</a></li>
+                    <li><a href="#contact" class="hover:text-yellow-400 transition duration-300 text-lg">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="text-white py-20 md:py-32 text-center rounded-b-3xl shadow-xl">
+        <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-center gap-12">
+            <div class="lg:w-full text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6 animate-fade-in-down">
+                    Unlock Gold Trading Potential with AI
+                </h1>
+                <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto opacity-90 animate-fade-in-up">
+                    XAU AI Is a next-generation, Al-powered trading indicator crafted with precision for Forex traders, who specialise in XAUUSD (Gold). It's built to decode the chaos of volatile markets and deliver clear, actionable, trading signals, helping you navigate every wave of price movement with confidence.
+                </p>
+                <a href="#pricing" class="bg-yellow-400 text-gray-900 hover:bg-yellow-500 font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out inline-block">
+                    Get Started Today
+                </a>
+            </div>
+            </div>
+    </section>
+
+    <section class="py-16 md:py-24 bg-gray-900 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-12">Numbers That Speak Volumes</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="p-8 rounded-xl bg-gray-800 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                    <p class="text-6xl font-extrabold text-yellow-400 mb-2">90%+</p>
+                    <p class="text-xl font-semibold text-gray-200">Signal Accuracy</p>
+                    <p class="text-gray-400 text-sm">Based on historical backtesting</p>
+                </div>
+                <div class="p-8 rounded-xl bg-gray-800 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                    <p class="text-6xl font-extrabold text-yellow-400 mb-2">24/7</p>
+                    <p class="text-xl font-semibold text-gray-200">Market Monitoring</p>
+                    <p class="text-gray-400 text-sm">AI constantly analyzes global gold markets</p>
+                </div>
+                <div class="p-8 rounded-xl bg-gray-800 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                    <p class="text-6xl font-extrabold text-yellow-400 mb-2">1000+</p>
+                    <p class="text-xl font-semibold text-gray-200">Satisfied Traders</p>
+                    <p class="text-gray-400 text-sm">Join our growing community</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Why XAU AI Beats a Normal Algo Indicator</h2>
+            <div class="max-w-5xl mx-auto rounded-xl shadow-lg overflow-hidden border-4 border-gray-400">
+                <table class="w-full text-white comparison-table">
+                    <thead>
+                        <tr>
+                            <th class="w-1/3">FEATURES/CAPABILITY</th>
+                            <th class="w-1/3">NORMAL ALGO INDICATOR</th>
+                            <th class="w-1/3">XAU AI INDICATOR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="uppercase">Market Adaptability</td>
+                            <td class="text-red-300">Static logic, often fails in volatility</td>
+                            <td class="text-green-300">Learns from patterns, adapts in real-time</td>
+                        </tr>
+                        <tr>
+                            <td class="uppercase">Signal Precision</td>
+                            <td class="text-red-300">Generic signals, prone to false alerts</td>
+                            <td class="text-green-300">High-accuracy entries/exits, real-time confirmations</td>
+                        </tr>
+                        <tr>
+                            <td class="uppercase">Focus</td>
+                            <td class="text-red-300">Multi-asset, diluted performance</td>
+                            <td class="text-green-300">Hyper-focused on XAUUSD for laser-sharp signals</td>
+                        </tr>
+                        <tr>
+                            <td class="uppercase">Learning Ability</td>
+                            <td class="text-red-300">Fixed strategy, no evolution</td>
+                            <td class="text-green-300">Continuously refines its approach via AI modeling</td>
+                        </tr>
+                        <tr>
+                            <td class="uppercase">Visual Interface</td>
+                            <td class="text-red-300">Basic chart lines, often cluttered</td>
+                            <td class="text-green-300">Clean visuals of BUY/SELL highlights</td>
+                        </tr>
+                        <tr>
+                            <td class="uppercase">Emotional Bias Elimination</td>
+                            <td class="text-red-300">Limited. Depends on user interpretation</td>
+                            <td class="text-green-300">Automated logic reduces human bias completely</td>
+                        </tr>
+                        <tr>
+                            <td class="uppercase">Backtesting Strength</td>
+                            <td class="text-red-300">Limited to predefined setups</td>
+                            <td class="text-green-300">Robust backtesting with dynamic logic handling</td>
+                        </tr>
+                        <tr>
+                            <td class="uppercase">Ease of Use</td>
+                            <td class="text-red-300">Confusing parameters & manual setup</td>
+                            <td class="text-green-300">Plug-and-play experience, no coding required</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="bg-gray-100 py-16 md:py-24">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-12 text-gray-800">How XAUAlgoAI Works</h2>
+            <div class="max-w-4xl mx-auto text-lg text-gray-700 space-y-6">
+                <p>It is a cutting-edge, AI-powered trading indicator built exclusively for the gold market (XAUUSD), designed to give you a precision edge whether you're a beginner or a pro. </p>
+                <p>It delivers real-time buy and sell signals by continuously scanning the market and identifying high-probability entry and exit points. Powered by a hybrid engine of artificial intelligence and advanced price action modeling, it dynamically adapts to all market conditions, be it volatility, consolidation, or breakouts.</p>
+                <p>With multi-timeframe intelligence, it analyzes multiple chart intervals simultaneously to align with your specific strategy. Seamlessly integrated into TradingView, It offers a clean, intuitive interface without the need for extra software. It’s specifically engineered for gold, with every formula, filter, and pattern tuned for XAUUSD's unique behavior. Its precision trend detection tools help you ride trends confidently without second-guessing, while its beginner-friendly yet pro-ready design ensures that anyone, from first-timers to seasoned traders, everyone can trade smarter, faster, and more efficiently now.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gold-chart" class="py-16 md:py-24 bg-gray-900 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-12">Live XAU/USD Price Chart</h2>
+            <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+                Track the real-time movement of Gold (XAU) against the US Dollar (USD) with our interactive chart.
+            </p>
+            <div id="goldChartContainer" class="chart-container">
+                </div>
+            <p class="text-sm text-gray-400 mt-4">
+                *Data is simulated for demonstration purposes. For live trading, always refer to your broker's feed.
+            </p>
+        </div>
+    </section>
+
+    <section id="video-showcase" class="py-16 md:py-24 bg-gray-900 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-12">See XAUAlgoAI in Action</h2>
+            <div class="max-w-4xl mx-auto video-container shadow-xl">
+                <iframe
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&controls=1&modestbranding=1&rel=0"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="rounded-xl"
+                    title="XAUAlgoAI Product Demo"
+                ></iframe>
+            </div>
+            <p class="text-lg text-gray-300 mt-8">Watch this video to understand how XAUAlgoAI can revolutionize your gold trading strategy.</p>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-24 bg-gradient-to-br from-gray-800 to-black text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-12">Ready to Get Started?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="p-8 rounded-xl bg-gray-700 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                    <div class="text-5xl font-extrabold text-yellow-400 mb-4">1</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-100">Choose Your Plan</h3>
+                    <p class="text-gray-300">Select the XAUAlgoAI subscription that best fits your trading needs and goals.</p>
+                </div>
+                <div class="p-8 rounded-xl bg-gray-700 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                    <div class="text-5xl font-extrabold text-yellow-400 mb-4">2</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-100">Install the Indicator</h3>
+                    <p class="text-gray-300">Follow our simple instructions to integrate XAUAlgoAI with your TradingView platform.</p>
+                </div>
+                <div class="p-8 rounded-xl bg-gray-700 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                    <div class="text-5xl font-extrabold text-yellow-400 mb-4">3</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-100">Start Trading Smarter</h3>
+                    <p class="text-gray-300">Receive real-time AI-powered signals and make informed gold trading decisions.</p>
+                </div>
+            </div>
+            <a href="#pricing" class="mt-12 bg-yellow-400 text-gray-900 hover:bg-yellow-500 font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out inline-block">
+                View Pricing Plans
+            </a>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-12 text-gray-800">What Our Traders Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-100 p-8 rounded-xl shadow-md border-t-4 border-yellow-400 hover:shadow-lg transition duration-300 ease-in-out cursor-pointer">
+                    <p class="text-lg italic text-gray-700 mb-4">I have used 10 bots before but this one finally got me ₹25000 profit in 2 weeks.</p>
+                    <p class="font-semibold text-yellow-600">Rajiv Singh, New Delhi</p>
+                </div>
+                <div class="bg-gray-100 p-8 rounded-xl shadow-md border-t-4 border-yellow-400 hover:shadow-lg transition duration-300 ease-in-out cursor-pointer">
+                    <p class="text-lg italic text-gray-700 mb-4">I was skeptical at first, but this indicator predicted a sharp move on XAUUSD I didn't even see coming. I made back my subscription in 2 trades</p>
+                    <p class="font-semibold text-yellow-600">Kartik Chaubey, Lucknow</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="py-16 md:py-24 bg-gradient-to-br from-gray-900 to-gray-700 text-white rounded-t-3xl shadow-xl">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-12">Flexible Plans for Every Trader</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg flex flex-col justify-between transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-4 text-gray-700">Monthly</h3>
+                        <p class="text-5xl font-extrabold mb-6">₹999<span class="text-xl font-normal">/month</span></p>
+                        <ul class="text-left space-y-3 mb-8 text-gray-700">
+                            </ul>
+                    </div>
+                    <a href="#contact" class="bg-gray-800 text-yellow-400 hover:bg-gray-900 font-bold py-3 px-6 rounded-full text-lg shadow-md transition duration-300">Choose Basic</a>
+                </div>
+
+                <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg border-4 border-yellow-400 flex flex-col justify-between transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-4 text-yellow-600">Quarterly <span class="text-sm bg-yellow-400 text-gray-900 px-2 py-1 rounded-full ml-2">Recommended</span></h3>
+                        <p class="text-5xl font-extrabold mb-6">₹2499<span class="text-xl font-normal">/month</span></p>
+                        <ul class="text-left space-y-3 mb-8 text-gray-700">
+                            </ul>
+                    </div>
+                    <a href="#contact" class="bg-yellow-500 text-gray-900 hover:bg-yellow-600 font-bold py-3 px-6 rounded-full text-lg shadow-md transition duration-300">Choose Pro</a>
+                </div>
+
+                <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg flex flex-col justify-between transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-4 text-gray-700">Yearly</h3>
+                        <p class="text-5xl font-extrabold mb-6">₹7999<span class="text-xl font-normal">/month</span></p>
+                        <ul class="text-left space-y-3 mb-8 text-gray-700">
+                            </ul>
+                    </div>
+                    <a href="#contact" class="bg-gray-700 text-yellow-400 hover:bg-gray-800 font-bold py-3 px-6 rounded-full text-lg shadow-md transition duration-300">Choose Premium</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Frequently Asked Questions</h2>
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-700">What trading platforms does XAUAlgoAI support?</h3>
+                    <p class="text-gray-600">Currently, XAUAlgoAI is compatible with TradingView. We are working on expanding support to other popular platforms soon.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-700">Is XAUAlgoAI suitable for beginners?</h3>
+                    <p class="text-gray-600">Yes! While it uses advanced AI, our indicator is designed with an intuitive interface, making it accessible for both seasoned traders and those new to the gold market.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-700">How do I get support?</h3>
+                    <p class="text-gray-600">You can reach our support team via email at contact.xauai@gmail.com. We provide instant support to our users.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-16 md:py-24 bg-gray-100">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-12 text-gray-800">Get in Touch</h2>
+            <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                <p class="text-lg text-gray-700 mb-6">Have questions or ready to elevate your gold trading? Contact us today!</p>
+                <form class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-left text-gray-700 text-sm font-bold mb-2">Name</label>
+                        <input type="text" id="name" name="name" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Your Name">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-left text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input type="email" id="email" name="email" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="your@example.com">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-left text-gray-700 text-sm font-bold mb-2">Message</label>
+                        <textarea id="message" name="message" rows="5" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Your message..."></textarea>
+                    </div>
+                    <button type="submit" class="bg-yellow-600 text-gray-900 hover:bg-yellow-700 font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-8 rounded-t-3xl shadow-inner">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <p>© 2025 XAUAlgoAI. All rights reserved.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#" class="hover:text-yellow-400 transition duration-300">Privacy Policy</a>
+                <a href="#" class="hover:text-yellow-400 transition duration-300">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <button onclick="scrollToTop()" id="scrollToTopBtn" title="Go to top">⬆️</button>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Get the button
+        let scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollToTopBtn.style.display = "block";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function scrollToTop() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+        // Placeholder for form submission (no actual backend)
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In a real application, you would send this data to a server
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            // Display a simple message box instead of alert()
+            const messageBox = document.createElement('div');
+            messageBox.className = 'fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50';
+            messageBox.innerHTML = `
+                <div class="bg-white p-8 rounded-lg shadow-xl text-center max-w-sm mx-auto">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Message Sent!</h3>
+                    <p class="text-gray-700 mb-6">Thank you, ${name}! Your message has been received. We'll get back to you at ${email} shortly.</p>
+                    <button class="bg-yellow-600 text-white hover:bg-yellow-700 font-bold py-2 px-6 rounded-full" onclick="this.parentNode.parentNode.remove()">Close</button>
+                </div>
+            `;
+            document.body.appendChild(messageBox);
+
+            // Clear the form
+            this.reset();
+        });
+
+        // D3.js Gold Chart
+        const margin = { top: 20, right: 30, bottom: 40, left: 60 };
+        let width = 0;
+        let height = 0;
+        let svg;
+        let x, y, line;
+        let data = [];
+        let currentPrice = 1950; // Starting gold price
+
+        function initializeChart() {
+            const container = document.getElementById('goldChartContainer');
+            if (!container) {
+                console.error('Chart container not found!');
+                return; // Exit if container not found
+            }
+
+            // Clear any existing SVG to prevent duplicates on resize
+            d3.select(container).select("svg").remove();
+
+            width = container.clientWidth - margin.left - margin.right;
+            height = 300 - margin.top - margin.bottom; // Fixed height for chart area
+
+            svg = d3.select("#goldChartContainer")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            x = d3.scaleTime().range([0, width]);
+            y = d3.scaleLinear().range([height, 0]);
+
+            line = d3.line()
+                .x(d => x(d.time))
+                .y(d => y(d.price));
+
+            // Add X and Y axis groups
+            svg.append("g")
+                .attr("class", "x-axis axis")
+                .attr("transform", `translate(0,${height})`);
+
+            svg.append("g")
+                .attr("class", "y-axis axis");
+
+            // Add the path for the line
+            svg.append("path")
+                .attr("class", "line");
+
+            // Initialize data with 30 points
+            data = [];
+            let now = new Date();
+            for (let i = 0; i < 30; i++) {
+                data.push({
+                    time: new Date(now.getTime() - (30 - 1 - i) * 1000), // 1 second intervals
+                    price: currentPrice + (Math.random() - 0.5) * 10 // Random initial fluctuation
+                });
+            }
+            updateChart();
+            console.log('D3.js chart initialized.');
+        }
+
+        function updateChart() {
+            // Add new data point
+            const newTime = new Date();
+            const priceChange = (Math.random() - 0.5) * 5; // Price fluctuates by +/- 2.5
+            currentPrice += priceChange;
+            currentPrice = Math.max(1800, Math.min(2100, currentPrice)); // Keep price within a reasonable range
+            data.push({ time: newTime, price: currentPrice });
+
+            // Remove old data points to keep a fixed window (e.g., last 30 seconds)
+            if (data.length > 30) {
+                data.shift();
+            }
+
+            // Update scales
+            x.domain(d3.extent(data, d => d.time));
+            y.domain([d3.min(data, d => d.price) - 5, d3.max(data, d => d.price) + 5]); // Add padding to y-axis
+
+            // Update axes
+            svg.select(".x-axis")
+                .call(d3.axisBottom(x).ticks(d3.timeSecond.every(5)).tickFormat(d3.timeFormat("%H:%M:%S")));
+
+            svg.select(".y-axis")
+                .call(d3.axisLeft(y).tickFormat(d => `₹${d.toFixed(2)}`)); // Format Y-axis as Rupees
+
+            // Update line path
+            svg.select(".line")
+                .datum(data)
+                .attr("d", line);
+        }
+
+        // Initialize chart on window load
+        window.onload = function() {
+            initializeChart();
+            // Update chart every second
+            setInterval(updateChart, 1000);
+        };
+
+        // Re-initialize chart on window resize for responsiveness
+        window.addEventListener('resize', initializeChart);
+    </script>
+</body>
+</html>
