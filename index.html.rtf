@@ -6,6 +6,7 @@
     <title>XAUAlgoAI - AI-Powered Gold Trading Indicator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- D3.js for the chart -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         body {
@@ -105,6 +106,7 @@
             padding: 1rem;
             border-bottom: 1px solid #4a5568; /* gray-700 */
             text-align: left;
+            min-width: 150px; /* Ensure columns have a minimum width */
         }
         .comparison-table th {
             background-color: #2d3748; /* gray-800 */
@@ -124,6 +126,7 @@
 </head>
 <body class="antialiased">
 
+    <!-- Header -->
     <header class="bg-gray-900 text-white p-4 shadow-lg">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
             <a href="#" class="text-3xl font-bold rounded-lg p-2 hover:bg-gray-700 hover:text-yellow-400 transition duration-300">XAUAlgoAI</a>
@@ -139,9 +142,13 @@
         </div>
     </header>
 
+    <!-- Hero Section -->
     <section id="home" class="text-white py-20 md:py-32 text-center rounded-b-3xl shadow-xl">
         <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-center gap-12">
             <div class="lg:w-full text-center">
+                <!-- XAU AI Logo Integration -->
+                <img src="https://lh3.googleusercontent.com/pw/AP1GczP5Wspc83w3V2DnxgnbOBSrg9w6HfOqlqQ9oi-opDyVrI57hbXRPBjxXlLP5s0q7V6s-t3LDIU-0pW9j8Ln8KTNCKs05IiEWwKAg07JdL4M8j3EuDOOAwZ_oBb5ZEIFGwTMzc9GgVOLzsEDL2nPvMMc=w2070-h1380-s-no-gm?authuser=0" alt="XAU AI Logo" class="mx-auto mb-8 rounded-lg shadow-lg max-w-[150px] h-auto transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                
                 <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6 animate-fade-in-down">
                     Unlock Gold Trading Potential with AI
                 </h1>
@@ -155,20 +162,24 @@
             </div>
     </section>
 
+    <!-- Key Metrics Section -->
     <section class="py-16 md:py-24 bg-gray-900 text-white">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold mb-12">Numbers That Speak Volumes</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Metric 1 -->
                 <div class="p-8 rounded-xl bg-gray-800 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
                     <p class="text-6xl font-extrabold text-yellow-400 mb-2">90%+</p>
                     <p class="text-xl font-semibold text-gray-200">Signal Accuracy</p>
                     <p class="text-gray-400 text-sm">Based on historical backtesting</p>
                 </div>
+                <!-- Metric 2 -->
                 <div class="p-8 rounded-xl bg-gray-800 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
                     <p class="text-6xl font-extrabold text-yellow-400 mb-2">24/7</p>
                     <p class="text-xl font-semibold text-gray-200">Market Monitoring</p>
                     <p class="text-gray-400 text-sm">AI constantly analyzes global gold markets</p>
                 </div>
+                <!-- Metric 3 -->
                 <div class="p-8 rounded-xl bg-gray-800 shadow-lg flex flex-col items-center transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
                     <p class="text-6xl font-extrabold text-yellow-400 mb-2">1000+</p>
                     <p class="text-xl font-semibold text-gray-200">Satisfied Traders</p>
@@ -178,65 +189,70 @@
         </div>
     </section>
 
+    <!-- Features Section - Updated with a comparison table -->
     <section id="features" class="py-16 md:py-24 bg-white">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Why XAU AI Beats a Normal Algo Indicator</h2>
             <div class="max-w-5xl mx-auto rounded-xl shadow-lg overflow-hidden border-4 border-gray-400">
-                <table class="w-full text-white comparison-table">
-                    <thead>
-                        <tr>
-                            <th class="w-1/3">FEATURES/CAPABILITY</th>
-                            <th class="w-1/3">NORMAL ALGO INDICATOR</th>
-                            <th class="w-1/3">XAU AI INDICATOR</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="uppercase">Market Adaptability</td>
-                            <td class="text-red-300">Static logic, often fails in volatility</td>
-                            <td class="text-green-300">Learns from patterns, adapts in real-time</td>
-                        </tr>
-                        <tr>
-                            <td class="uppercase">Signal Precision</td>
-                            <td class="text-red-300">Generic signals, prone to false alerts</td>
-                            <td class="text-green-300">High-accuracy entries/exits, real-time confirmations</td>
-                        </tr>
-                        <tr>
-                            <td class="uppercase">Focus</td>
-                            <td class="text-red-300">Multi-asset, diluted performance</td>
-                            <td class="text-green-300">Hyper-focused on XAUUSD for laser-sharp signals</td>
-                        </tr>
-                        <tr>
-                            <td class="uppercase">Learning Ability</td>
-                            <td class="text-red-300">Fixed strategy, no evolution</td>
-                            <td class="text-green-300">Continuously refines its approach via AI modeling</td>
-                        </tr>
-                        <tr>
-                            <td class="uppercase">Visual Interface</td>
-                            <td class="text-red-300">Basic chart lines, often cluttered</td>
-                            <td class="text-green-300">Clean visuals of BUY/SELL highlights</td>
-                        </tr>
-                        <tr>
-                            <td class="uppercase">Emotional Bias Elimination</td>
-                            <td class="text-red-300">Limited. Depends on user interpretation</td>
-                            <td class="text-green-300">Automated logic reduces human bias completely</td>
-                        </tr>
-                        <tr>
-                            <td class="uppercase">Backtesting Strength</td>
-                            <td class="text-red-300">Limited to predefined setups</td>
-                            <td class="text-green-300">Robust backtesting with dynamic logic handling</td>
-                        </tr>
-                        <tr>
-                            <td class="uppercase">Ease of Use</td>
-                            <td class="text-red-300">Confusing parameters & manual setup</td>
-                            <td class="text-green-300">Plug-and-play experience, no coding required</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <!-- Added overflow-x-auto for horizontal scrolling on small screens -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-white comparison-table">
+                        <thead>
+                            <tr>
+                                <th class="w-1/3">FEATURES/CAPABILITY</th>
+                                <th class="w-1/3">NORMAL ALGO INDICATOR</th>
+                                <th class="w-1/3">XAU AI INDICATOR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="uppercase">Market Adaptability</td>
+                                <td class="text-red-300">Static logic, often fails in volatility</td>
+                                <td class="text-green-300">Learns from patterns, adapts in real-time</td>
+                            </tr>
+                            <tr>
+                                <td class="uppercase">Signal Precision</td>
+                                <td class="text-red-300">Generic signals, prone to false alerts</td>
+                                <td class="text-green-300">High-accuracy entries/exits, real-time confirmations</td>
+                            </tr>
+                            <tr>
+                                <td class="uppercase">Focus</td>
+                                <td class="text-red-300">Multi-asset, diluted performance</td>
+                                <td class="text-green-300">Hyper-focused on XAUUSD for laser-sharp signals</td>
+                            </tr>
+                            <tr>
+                                <td class="uppercase">Learning Ability</td>
+                                <td class="text-red-300">Fixed strategy, no evolution</td>
+                                <td class="text-green-300">Continuously refines its approach via AI modeling</td>
+                            </tr>
+                            <tr>
+                                <td class="uppercase">Visual Interface</td>
+                                <td class="text-red-300">Basic chart lines, often cluttered</td>
+                                <td class="text-green-300">Clean visuals of BUY/SELL highlights</td>
+                            </tr>
+                            <tr>
+                                <td class="uppercase">Emotional Bias Elimination</td>
+                                <td class="text-red-300">Limited. Depends on user interpretation</td>
+                                <td class="text-green-300">Automated logic reduces human bias completely</td>
+                            </tr>
+                            <tr>
+                                <td class="uppercase">Backtesting Strength</td>
+                                <td class="text-red-300">Limited to predefined setups</td>
+                                <td class="text-green-300">Robust backtesting with dynamic logic handling</td>
+                            </tr>
+                            <tr>
+                                <td class="uppercase">Ease of Use</td>
+                                <td class="text-red-300">Confusing parameters & manual setup</td>
+                                <td class="text-green-300">Plug-and-play experience, no coding required</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- How It Works Section (Still present but not in main nav) -->
     <section id="how-it-works" class="bg-gray-100 py-16 md:py-24">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold mb-12 text-gray-800">How XAUAlgoAI Works</h2>
@@ -248,6 +264,7 @@
         </div>
     </section>
 
+    <!-- Real-time Gold Chart Section -->
     <section id="gold-chart" class="py-16 md:py-24 bg-gray-900 text-white">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold mb-12">Live XAU/USD Price Chart</h2>
@@ -262,12 +279,16 @@
         </div>
     </section>
 
+    <!-- AI-Powered Strategy Generator Section (Removed) -->
+    <!-- This section was removed as per user request -->
+
+    <!-- Video Showcase Section (Still present but not in main nav) -->
     <section id="video-showcase" class="py-16 md:py-24 bg-gray-900 text-white">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold mb-12">See XAUAlgoAI in Action</h2>
             <div class="max-w-4xl mx-auto video-container shadow-xl">
                 <iframe
-                    src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&controls=1&modestbranding=1&rel=0"
+                    src="https://www.youtube.com/embed/wc-Lpc1ObDw"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen
@@ -279,6 +300,7 @@
         </div>
     </section>
 
+    <!-- How to Get Started Section -->
     <section class="py-16 md:py-24 bg-gradient-to-br from-gray-800 to-black text-white">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold mb-12">Ready to Get Started?</h2>
@@ -305,14 +327,17 @@
         </div>
     </section>
 
+    <!-- Testimonials Section (Placeholder) -->
     <section class="py-16 md:py-24 bg-white">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold mb-12 text-gray-800">What Our Traders Say</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Testimonial 1 -->
                 <div class="bg-gray-100 p-8 rounded-xl shadow-md border-t-4 border-yellow-400 hover:shadow-lg transition duration-300 ease-in-out cursor-pointer">
                     <p class="text-lg italic text-gray-700 mb-4">I have used 10 bots before but this one finally got me ₹25000 profit in 2 weeks.</p>
                     <p class="font-semibold text-yellow-600">Rajiv Singh, New Delhi</p>
                 </div>
+                <!-- Testimonial 2 -->
                 <div class="bg-gray-100 p-8 rounded-xl shadow-md border-t-4 border-yellow-400 hover:shadow-lg transition duration-300 ease-in-out cursor-pointer">
                     <p class="text-lg italic text-gray-700 mb-4">I was skeptical at first, but this indicator predicted a sharp move on XAUUSD I didn't even see coming. I made back my subscription in 2 trades</p>
                     <p class="font-semibold text-yellow-600">Kartik Chaubey, Lucknow</p>
@@ -321,36 +346,43 @@
         </div>
     </section>
 
+    <!-- Pricing Section -->
     <section id="pricing" class="py-16 md:py-24 bg-gradient-to-br from-gray-900 to-gray-700 text-white rounded-t-3xl shadow-xl">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold mb-12">Flexible Plans for Every Trader</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Basic Plan -->
                 <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg flex flex-col justify-between transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
                     <div>
                         <h3 class="text-3xl font-bold mb-4 text-gray-700">Monthly</h3>
-                        <p class="text-5xl font-extrabold mb-6">₹999<span class="text-xl font-normal">/month</span></p>
+                        <p class="text-5xl font-extrabold mb-6">$50<span class="text-xl font-normal">/month</span></p>
                         <ul class="text-left space-y-3 mb-8 text-gray-700">
-                            </ul>
+                            <!-- Features removed as per request -->
+                        </ul>
                     </div>
                     <a href="#contact" class="bg-gray-800 text-yellow-400 hover:bg-gray-900 font-bold py-3 px-6 rounded-full text-lg shadow-md transition duration-300">Choose Basic</a>
                 </div>
 
+                <!-- Pro Plan -->
                 <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg border-4 border-yellow-400 flex flex-col justify-between transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
                     <div>
                         <h3 class="text-3xl font-bold mb-4 text-yellow-600">Quarterly <span class="text-sm bg-yellow-400 text-gray-900 px-2 py-1 rounded-full ml-2">Recommended</span></h3>
-                        <p class="text-5xl font-extrabold mb-6">₹2499<span class="text-xl font-normal">/month</span></p>
+                        <p class="text-5xl font-extrabold mb-6">$120<span class="text-xl font-normal">/month</span></p>
                         <ul class="text-left space-y-3 mb-8 text-gray-700">
-                            </ul>
+                            <!-- Features removed as per request -->
+                        </ul>
                     </div>
                     <a href="#contact" class="bg-yellow-500 text-gray-900 hover:bg-yellow-600 font-bold py-3 px-6 rounded-full text-lg shadow-md transition duration-300">Choose Pro</a>
                 </div>
 
+                <!-- Premium Plan -->
                 <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg flex flex-col justify-between transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
                     <div>
                         <h3 class="text-3xl font-bold mb-4 text-gray-700">Yearly</h3>
-                        <p class="text-5xl font-extrabold mb-6">₹7999<span class="text-xl font-normal">/month</span></p>
+                        <p class="text-5xl font-extrabold mb-6">$400<span class="text-xl font-normal">/month</span></p>
                         <ul class="text-left space-y-3 mb-8 text-gray-700">
-                            </ul>
+                            <!-- Features removed as per request -->
+                        </ul>
                     </div>
                     <a href="#contact" class="bg-gray-700 text-yellow-400 hover:bg-gray-800 font-bold py-3 px-6 rounded-full text-lg shadow-md transition duration-300">Choose Premium</a>
                 </div>
@@ -358,18 +390,23 @@
         </div>
     </section>
 
+    <!-- FAQ Section -->
     <section class="py-16 md:py-24 bg-white">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Frequently Asked Questions</h2>
             <div class="max-w-3xl mx-auto space-y-6">
+                <!-- FAQ Item 1 -->
                 <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer">
                     <h3 class="text-xl font-semibold mb-2 text-gray-700">What trading platforms does XAUAlgoAI support?</h3>
                     <p class="text-gray-600">Currently, XAUAlgoAI is compatible with TradingView. We are working on expanding support to other popular platforms soon.</p>
                 </div>
+                <!-- FAQ Item 2 -->
                 <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer">
                     <h3 class="text-xl font-semibold mb-2 text-gray-700">Is XAUAlgoAI suitable for beginners?</h3>
                     <p class="text-gray-600">Yes! While it uses advanced AI, our indicator is designed with an intuitive interface, making it accessible for both seasoned traders and those new to the gold market.</p>
                 </div>
+                <!-- Removed FAQ Item 3 as per request -->
+                <!-- FAQ Item 4 (now 3rd) -->
                 <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out cursor-pointer">
                     <h3 class="text-xl font-semibold mb-2 text-gray-700">How do I get support?</h3>
                     <p class="text-gray-600">You can reach our support team via email at contact.xauai@gmail.com. We provide instant support to our users.</p>
@@ -378,6 +415,7 @@
         </div>
     </section>
 
+    <!-- Contact Section -->
     <section id="contact" class="py-16 md:py-24 bg-gray-100">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold mb-12 text-gray-800">Get in Touch</h2>
@@ -404,6 +442,7 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="bg-gray-900 text-white py-8 rounded-t-3xl shadow-inner">
         <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
             <p>© 2025 XAUAlgoAI. All rights reserved.</p>
@@ -414,6 +453,7 @@
         </div>
     </footer>
 
+    <!-- Scroll to Top Button -->
     <button onclick="scrollToTop()" id="scrollToTopBtn" title="Go to top">⬆️</button>
 
     <script>
@@ -555,7 +595,7 @@
                 .call(d3.axisBottom(x).ticks(d3.timeSecond.every(5)).tickFormat(d3.timeFormat("%H:%M:%S")));
 
             svg.select(".y-axis")
-                .call(d3.axisLeft(y).tickFormat(d => `₹${d.toFixed(2)}`)); // Format Y-axis as Rupees
+                .call(d3.axisLeft(y).tickFormat(d => `$${d.toFixed(2)}`)); // Format Y-axis as USD
 
             // Update line path
             svg.select(".line")
